@@ -6,6 +6,8 @@
     <version>1.0</version>
     <packaging>jar</packaging>
     
+    <name>JAX-RS-JPA-CRUD</name>
+    
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
