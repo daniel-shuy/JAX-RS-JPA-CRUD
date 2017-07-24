@@ -19,12 +19,12 @@ For each CRUD database table:
 - Create a Repository Class that extends `com.github.daniel.shuy.ws.rs.jpa.crud.RepositoryCRUD`
 - Create a JAX-RS Resource Class that extends `com.github.daniel.shuy.ws.rs.jpa.crud.ResourceCRUD`.
 
-## Example:
-- This example uses Dependency Injection (DI) to:
-  - Inject the `EntityManagerFactory` into the Repository Class
-  - Inject the Repository Class into the JAX-RS Resource Class.
+### Example:
+This example uses Dependency Injection (DI) to:
+- Inject the `EntityManagerFactory` into the Repository Class
+- Inject the Repository Class into the JAX-RS Resource Class.
 
-Entity Class:
+#### Entity Class:
 ```java
 @Entity
 @Table(name = "user")
@@ -62,7 +62,7 @@ public class User extends EntityCRUD {
 }
 ```
 
-Repository Class:
+#### Repository Class:
 ```java
 public class UserRepository extends Repository<User> {
     @Inject
@@ -72,7 +72,7 @@ public class UserRepository extends Repository<User> {
 }
 ```
 
-Resource Class:
+#### Resource Class:
 ```java
 @Path("/user")
 public class UserResource extends ResourceCRUD<User, UserRepository> {
