@@ -1,4 +1,4 @@
-package com.github.daniel.shuy.jax.rs.jpa.crud;
+package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;

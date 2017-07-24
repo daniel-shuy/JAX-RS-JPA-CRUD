@@ -1,4 +1,4 @@
-package com.github.daniel.shuy.jax.rs.jpa.crud;
+package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import com.github.daniel.shuy.JPAUtils;
 import java.util.List;

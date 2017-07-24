@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.daniel.shuy.jax.rs.jpa.crud;
+package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import java.util.List;
 import javax.ws.rs.Consumes;

@@ -1,4 +1,4 @@
-package com.github.daniel.shuy.jax.rs.jpa.crud;
+package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
