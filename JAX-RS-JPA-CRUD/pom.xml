@@ -18,6 +18,10 @@
         </license>
     </licenses>
     
+    <scm>
+        <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</url>
+    </scm>
+    
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
