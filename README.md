@@ -64,7 +64,7 @@ public class User extends EntityCRUD {
 
 #### Repository Class:
 ```java
-public class UserRepository extends Repository<User> {
+public class UserRepository extends RepositoryCRUD<User> {
     @Inject
     public UserRepository(EntityManagerFactory entityManagerFactory) {
         super(User.class);
