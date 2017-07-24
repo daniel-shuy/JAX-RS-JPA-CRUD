@@ -7,6 +7,7 @@
     <packaging>jar</packaging>
     
     <name>JAX-RS-JPA-CRUD</name>
+    <description>Provides extendable classes to create JAX-RS CRUD Web Services tied to JPA entity classes</description>
     
     <dependencies>
         <dependency>
