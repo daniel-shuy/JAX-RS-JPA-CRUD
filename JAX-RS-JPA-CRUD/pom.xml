@@ -8,6 +8,7 @@
     
     <name>JAX-RS-JPA-CRUD</name>
     <description>Provides extendable classes to create JAX-RS CRUD Web Services tied to JPA entity classes</description>
+    <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD</url>
     
     <dependencies>
         <dependency>
