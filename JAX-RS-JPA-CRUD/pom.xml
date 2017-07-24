@@ -10,6 +10,14 @@
     <description>Provides extendable classes to create JAX-RS CRUD Web Services tied to JPA entity classes</description>
     <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD</url>
     
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
