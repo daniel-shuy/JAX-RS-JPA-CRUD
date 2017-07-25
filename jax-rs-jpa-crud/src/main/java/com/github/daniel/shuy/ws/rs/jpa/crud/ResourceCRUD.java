@@ -6,6 +6,7 @@
 package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import java.util.List;
+import java.util.function.Function;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Extend this class to create a CRUD RepositoryCRUD Class.
@@ -43,16 +45,10 @@ public abstract class ResourceCRUD<E extends EntityCRUD, R extends RepositoryCRU
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public E read(@PathParam("id") String id) {
-        long idLong;
-        try {
-            idLong = Long.parseLong(id);
-        }
-        catch (NumberFormatException e) {
-            return null;
-        }
-        
-        return repository.get(idLong);
+    public Response read(@PathParam("id") String id) {
+        return doWithID(id, (idLong) -> {
+            return Response.ok(repository.get(idLong)).build();
+        });
     }
 
     @PUT
@@ -65,5 +61,16 @@ public abstract class ResourceCRUD<E extends EntityCRUD, R extends RepositoryCRU
     @Consumes(MediaType.APPLICATION_JSON)
     public void delete(E content) {
         repository.remove(content);
+    private Response doWithID(String id, Function<Long, Response> function) {
+        long idLong;
+        try {
+            idLong = Long.parseLong(id);
+        }
+        catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("id must be a Number").build();
+        }
+        
+        return function.apply(idLong);
+    }
     }
 }
