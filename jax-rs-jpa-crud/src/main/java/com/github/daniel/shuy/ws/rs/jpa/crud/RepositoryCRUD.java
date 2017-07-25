@@ -72,13 +72,17 @@ public abstract class RepositoryCRUD<E extends EntityCRUD> {
         });
     }
     
-    public void remove(E e) {
-        jpaUtils.executeQuery((entityManager) -> {
-            EntityTransaction transaction = entityManager.getTransaction();
+    public void remove(Long id) {
+        final E e = get(id);
+        
+        if (e != null) {
+            jpaUtils.executeQuery((entityManager) -> {
+                EntityTransaction transaction = entityManager.getTransaction();
 
-            transaction.begin();
-            entityManager.remove(e);
-            transaction.commit();
-        });
+                transaction.begin();
+                entityManager.remove(e);
+                transaction.commit();
+            });
+        }
     }
 }

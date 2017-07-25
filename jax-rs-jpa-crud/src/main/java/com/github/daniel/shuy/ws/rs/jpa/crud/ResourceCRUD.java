@@ -6,6 +6,7 @@
 package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -58,9 +59,13 @@ public abstract class ResourceCRUD<E extends EntityCRUD, R extends RepositoryCRU
     }
     
     @DELETE
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void delete(E content) {
-        repository.remove(content);
+    @Path("{id}")
+    public void delete(@PathParam("id") String id) {
+        doWithID(id, (idLong) -> {
+            repository.remove(idLong);
+        });
+    }
+    
     private Response doWithID(String id, Function<Long, Response> function) {
         long idLong;
         try {
@@ -72,5 +77,10 @@ public abstract class ResourceCRUD<E extends EntityCRUD, R extends RepositoryCRU
         
         return function.apply(idLong);
     }
+    private void doWithID(String id, Consumer<Long> consumer) {
+        doWithID(id, (idLong) -> {
+            consumer.accept(idLong);
+            return null;
+        });
     }
 }
