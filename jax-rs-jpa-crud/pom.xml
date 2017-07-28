@@ -66,6 +66,13 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    <developers>
+        <developer>
+            <name>Daniel Shuy</name>
+            <email>daniel_shuy@hotmail.com</email>
+            <url>https://github.com/daniel-shuy</url>
+        </developer>
+    </developers>
     
     <scm>
         <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</url>
