@@ -104,4 +104,10 @@
         <developerConnection>scm:git:ssh://github.com:daniel-shuy/JAX-RS-JPA-CRUD.git</developerConnection>
         <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</url>
     </scm>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
