@@ -1,33 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
     <groupId>com.github.daniel-shuy</groupId>
     <artifactId>jax-rs-jpa-crud</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
-    
-    <name>JAX-RS-JPA-CRUD</name>
-    <description>Provides extendable classes to create JAX-RS CRUD Web Services tied to JPA entity classes</description>
-    <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD</url>
-    
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    
-    <scm>
-        <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</url>
-    </scm>
-    
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
-    
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
@@ -41,6 +19,11 @@
             <version>1.0</version>
         </dependency>
     </dependencies>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
     
     <build>
         <plugins>
@@ -72,4 +55,19 @@
             </plugin>
         </plugins>
     </build>
+    
+    <name>JAX-RS-JPA-CRUD</name>
+    <description>Provides extendable classes to create JAX-RS CRUD Web Services tied to JPA entity classes</description>
+    <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <scm>
+        <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</url>
+    </scm>
 </project>
