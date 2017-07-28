@@ -75,6 +75,8 @@
     </developers>
     
     <scm>
+        <connection>scm:git:git://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</connection>
+        <developerConnection>scm:git:ssh://github.com:daniel-shuy/JAX-RS-JPA-CRUD.git</developerConnection>
         <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</url>
     </scm>
 </project>
