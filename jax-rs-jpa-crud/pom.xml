@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.daniel-shuy</groupId>
     <artifactId>jax-rs-jpa-crud</artifactId>
-    <version>1.0</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
     
     <name>JAX-RS-JPA-CRUD</name>
