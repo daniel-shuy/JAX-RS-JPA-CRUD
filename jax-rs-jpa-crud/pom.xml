@@ -23,6 +23,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <project.scm.id>github</project.scm.id>
     </properties>
     
     <build>
@@ -71,7 +73,7 @@
     
     <scm>
         <connection>scm:git:git://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</connection>
-        <developerConnection>scm:git:ssh://github.com:daniel-shuy/JAX-RS-JPA-CRUD.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</developerConnection>
         <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</url>
     </scm>
     <distributionManagement>
