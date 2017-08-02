@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Extend this class to create a CRUD Repository Class.
+ * Extend this class to create a CRUD JAX-RS Repository Class.
  *
  * @param <E> The Entity Class type
  */

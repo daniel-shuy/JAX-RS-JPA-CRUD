@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Extend this class to create a CRUD Entity Class.
+ * Extend this class to create a CRUD JPA Entity Class.
  * <p>
  * The corresponding database table must have a sequential number Surrogate
  * Primary Key.
