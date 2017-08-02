@@ -3,6 +3,7 @@ package com.github.daniel.shuy.ws.rs.jpa.crud;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,16 +16,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Extend this class to create a CRUD RepositoryCRUD Class.
+ * Extend this class to create a CRUD Repository Class.
  * @param <E> The Entity Class type
- * @param <R> The Repository Class type
  */
-public abstract class ResourceCRUD<E extends EntityCRUD, R extends RepositoryCRUD<E>> {
-    private final R repository;
-    
-    public ResourceCRUD(R repository) {
-        this.repository = repository;
-    }
+public abstract class ResourceCRUD<E extends EntityCRUD> {
+    @Inject private RepositoryCRUD<E> repository;
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
