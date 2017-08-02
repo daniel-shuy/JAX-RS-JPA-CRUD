@@ -96,6 +96,7 @@ public class User extends EntityCRUD {
 
 #### Repository Class:
 ```java
+@ApplicationScoped
 public class UserRepository extends RepositoryCRUD<User> {
 }
 ```
