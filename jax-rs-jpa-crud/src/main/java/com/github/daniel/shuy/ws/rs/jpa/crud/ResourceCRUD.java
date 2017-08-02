@@ -17,23 +17,25 @@ import javax.ws.rs.core.Response;
 
 /**
  * Extend this class to create a CRUD Repository Class.
+ *
  * @param <E> The Entity Class type
  */
 public abstract class ResourceCRUD<E extends EntityCRUD> {
-    @Inject private RepositoryCRUD<E> repository;
-    
+    @Inject
+    private RepositoryCRUD<E> repository;
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void create(E content) {
         repository.add(content);
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<E> readAll() {
         return repository.getAll();
     }
-    
+
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,7 +50,7 @@ public abstract class ResourceCRUD<E extends EntityCRUD> {
     public void update(E content) {
         repository.update(content);
     }
-    
+
     @DELETE
     @Path("{id}")
     public void delete(@PathParam("id") String id) {
@@ -56,18 +58,18 @@ public abstract class ResourceCRUD<E extends EntityCRUD> {
             repository.remove(idLong);
         });
     }
-    
+
     private Response doWithID(String id, Function<Long, Response> function) {
         long idLong;
         try {
             idLong = Long.parseLong(id);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity("id must be a Number").build();
         }
-        
+
         return function.apply(idLong);
     }
+
     private void doWithID(String id, Consumer<Long> consumer) {
         doWithID(id, (idLong) -> {
             consumer.accept(idLong);

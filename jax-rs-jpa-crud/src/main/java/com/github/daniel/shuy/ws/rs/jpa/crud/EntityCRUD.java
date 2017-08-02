@@ -9,9 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Extend this class to create a CRUD EntityCRUD Class.
+ * Extend this class to create a CRUD Entity Class.
  * <p>
- * The corresponding database table must have a sequential number Surrogate Primary Key.
+ * The corresponding database table must have a sequential number Surrogate
+ * Primary Key.
  */
 @MappedSuperclass
 public abstract class EntityCRUD implements Serializable {
@@ -20,9 +21,10 @@ public abstract class EntityCRUD implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
-    
-    public EntityCRUD() {}
-    
+
+    public EntityCRUD() {
+    }
+
     public EntityCRUD(Long id) {
         this.id = id;
     }
@@ -34,7 +36,7 @@ public abstract class EntityCRUD implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -47,11 +49,10 @@ public abstract class EntityCRUD implements Serializable {
         if (!(object instanceof EntityCRUD) || !this.getClass().isInstance(object)) {
             return false;
         }
-        EntityCRUD other = (EntityCRUD)object;
+        EntityCRUD other = (EntityCRUD) object;
         if (this.id == null) {
             return (other.id == null);
-        }
-        else {
+        } else {
             return this.id.equals(other.id);
         }
     }

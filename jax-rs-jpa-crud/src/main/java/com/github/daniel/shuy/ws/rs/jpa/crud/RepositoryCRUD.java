@@ -15,19 +15,24 @@ import javax.persistence.criteria.Root;
 
 /**
  * Extend this class to create a CRUD Repository Class.
+ *
  * @param <E> The Entity Class type
  */
 public abstract class RepositoryCRUD<E extends EntityCRUD> {
-    @Inject private EntityManager entityManager;
-    @Inject @New private Instance<E> entity;
-    
+    @Inject
+    private EntityManager entityManager;
+
+    @Inject
+    @New
+    private Instance<E> entity;
+
     private Class<? extends EntityCRUD> clazz;
-    
+
     @PostConstruct
     void postConstruct() {
         clazz = entity.get().getClass();
     }
-    
+
     public void add(E e) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -35,7 +40,7 @@ public abstract class RepositoryCRUD<E extends EntityCRUD> {
         entityManager.persist(e);
         transaction.commit();
     }
-    
+
     public List<E> getAll() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(clazz);
@@ -44,7 +49,7 @@ public abstract class RepositoryCRUD<E extends EntityCRUD> {
 
         return query.getResultList();
     }
-    
+
     public E get(Long id) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(clazz);
@@ -54,13 +59,12 @@ public abstract class RepositoryCRUD<E extends EntityCRUD> {
         E result;
         try {
             result = query.getSingleResult();
-        }
-        catch (NoResultException e) {
+        } catch (NoResultException e) {
             result = null;
         }
         return result;
     }
-    
+
     public void update(E e) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -68,10 +72,10 @@ public abstract class RepositoryCRUD<E extends EntityCRUD> {
         entityManager.merge(e);
         transaction.commit();
     }
-    
+
     public void remove(Long id) {
         final E e = get(id);
-        
+
         if (e != null) {
             EntityTransaction transaction = entityManager.getTransaction();
 
