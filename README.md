@@ -1,5 +1,5 @@
 # JAX-RS-JPA-CRUD
-Provides extendable classes to create JAX-RS CRUD Web Services tied to JPA entity classes.
+Provides extendable classes to create JAX-RS CRUD Web Services from JPA entity classes.
 
 The generated JAX-RS Web Services will contain:
 - A `POST` method to add a row to the database table
@@ -8,11 +8,47 @@ The generated JAX-RS Web Services will contain:
 - A `PUT` method to update a row in the database table
 - A `DELETE` method to delete a row in the database table
 
-## Installation
-This project is currently undergoing application to deploy to Maven Central. In the meantime, please clone, build and publish the project locally to use it.
+## Requirements
+| Version | Java EE dependency |
+| ------- | ------------------ |
+| 1.X.X | Java EE 6 |
+| 2.X.X | Java EE 7 |
 
 ## Usage
-All CRUD database tables must have a sequential number Surrogate Primary Key.
+Add the following to your Maven dependency list:
+```
+<dependency>
+    <groupId>com.github.daniel-shuy</groupId>
+    <artifactId>jax-rs-jpa-crud</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+Version 2.0.0+ uses CDI (Contexts and Dependency Injection).
+
+The JPA [EntityManager](docs.oracle.com/javaee/7/api/javax/persistence/EntityManager.html) must be injected via CDI.
+
+The injected EntityManager must be [@RequestScoped](http://docs.oracle.com/javaee/7/api/javax/enterprise/context/RequestScoped.html) to ensure each request will create a new EntityManager.
+
+Example code to inject EntityManager:
+```java
+@ApplicationScoped
+public class EntityManagerProducer {
+    // ...
+    
+    @Produces
+    @RequestScoped
+    EntityManager createEntityManager() {
+        // ...
+    }
+    
+    void closeEntityManager(@Disposes EntityManager entityManager) {
+        entityManager.close();
+    }
+}
+```
+
+__All CRUD database tables must have a sequential number Surrogate Primary Key.__
 
 For each CRUD database table:
 - Create a JPA Entity Class that extends `com.github.daniel.shuy.ws.rs.jpa.crud.EntityCRUD`
@@ -20,10 +56,6 @@ For each CRUD database table:
 - Create a JAX-RS Resource Class that extends `com.github.daniel.shuy.ws.rs.jpa.crud.ResourceCRUD`.
 
 ### Example:
-This example uses Dependency Injection (DI) to:
-- Inject the `EntityManagerFactory` into the Repository Class
-- Inject the Repository Class into the JAX-RS Resource Class.
-
 #### Entity Class:
 ```java
 @Entity
@@ -65,20 +97,12 @@ public class User extends EntityCRUD {
 #### Repository Class:
 ```java
 public class UserRepository extends RepositoryCRUD<User> {
-    @Inject
-    public UserRepository(EntityManagerFactory entityManagerFactory) {
-        super(User.class);
-    }
 }
 ```
 
 #### Resource Class:
 ```java
 @Path("/user")
-public class UserResource extends ResourceCRUD<User, UserRepository> {
-    @Inject
-    public UserResource(UserRepository userRepository) {
-        super(userRepository);
-    }
+public class UserResource extends ResourceCRUD<User> {
 }
 ```
