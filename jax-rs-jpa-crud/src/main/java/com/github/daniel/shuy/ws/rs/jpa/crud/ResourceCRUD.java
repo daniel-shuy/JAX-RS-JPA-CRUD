@@ -1,5 +1,6 @@
 package com.github.daniel.shuy.ws.rs.jpa.crud;
 
+import java.io.Closeable;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -19,43 +20,71 @@ import javax.ws.rs.core.Response;
  *
  * @param <E> The Entity Class type
  */
-public interface ResourceCRUD<E extends EntityCRUD> {
+public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     public abstract RepositoryCRUD<E> getRepository();
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public default void create(E content) {
-        getRepository().add(content);
+        try {
+            getRepository().add(content);
+        }
+        finally {
+            close();
+        }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public default List<E> readAll() {
-        return getRepository().getAll();
+        try {
+            return getRepository().getAll();
+        }
+        finally {
+            close();
+        }
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public default Response read(@PathParam("id") String id) {
-        return doWithID(id, (idLong) -> {
-            return Response.ok(getRepository().get(idLong)).build();
-        });
+        try {
+            return doWithID(id, (idLong) -> {
+                return Response.ok(getRepository().get(idLong)).build();
+            });
+        }
+        finally {
+            close();
+        }
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public default void update(E content) {
-        getRepository().update(content);
+        try {
+            getRepository().update(content);
+        }
+        finally {
+            close();
+        }
     }
 
     @DELETE
     @Path("{id}")
     public default void delete(@PathParam("id") String id) {
-        doWithID(id, (idLong) -> {
-            getRepository().remove(idLong);
-        });
+        try {
+            doWithID(id, (idLong) -> {
+                getRepository().remove(idLong);
+            });
+        }
+        finally {
+            close();
+        }
     }
+
+    @Override
+    public default void close() {}
 
     // TODO: change to private in Java 9
     public default Response doWithID(String id, Function<Long, Response> function) {
