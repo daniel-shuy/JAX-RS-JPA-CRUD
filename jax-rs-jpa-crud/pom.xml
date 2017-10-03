@@ -4,7 +4,7 @@
     
     <groupId>com.github.daniel-shuy</groupId>
     <artifactId>jax-rs-jpa-crud</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -76,7 +76,7 @@
         <connection>scm:git:git://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</connection>
         <developerConnection>scm:git:https://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</developerConnection>
         <url>https://github.com/daniel-shuy/JAX-RS-JPA-CRUD.git</url>
-        <tag>HEAD</tag>
+        <tag>jax-rs-jpa-crud-3.0.0</tag>
     </scm>
     <distributionManagement>
         <snapshotRepository>
