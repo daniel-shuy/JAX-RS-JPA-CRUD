@@ -83,6 +83,7 @@ Override `getEntityManager` to provide the JPA [EntityManager](https://static.ja
 - Requires JavaEE
 ```java
 @Stateless
+@LocalBean
 public class UserRepository implements RepositoryCRUD<User> {
     @PersistenceContext(name = "persistence-unit")
     private EntityManager entityManager;
@@ -100,7 +101,7 @@ public class UserRepository implements RepositoryCRUD<User> {
 ```
 
 ##### CDI Example
-- Requires CDI (eg. Weld)
+- Requires CDI
 ```java
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
@@ -148,7 +149,24 @@ public class UserRepository implements RepositoryCRUD<User> {
 
 #### Resource Class
 
-##### EJB/CDI Example:
+##### EJB Example
+- Requires JavaEE
+```java
+@Path("/user")
+@Stateless
+public class UserResource implements ResourceCRUD<User> {
+    @EJB
+    private UserRepository repository;
+
+    @Override
+    public RepositoryCRUD<User> getRepository() {
+        return repository;
+    }
+}
+```
+
+##### CDI Example:
+- Requires CDI
 ```java
 @Path("/user")
 public class UserResource implements ResourceCRUD<User> {
