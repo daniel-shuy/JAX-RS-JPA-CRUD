@@ -3,7 +3,6 @@ package com.github.daniel.shuy.ws.rs.jpa.crud;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -20,46 +19,46 @@ import javax.ws.rs.core.Response;
  *
  * @param <E> The Entity Class type
  */
-public abstract class ResourceCRUD<E extends EntityCRUD> {
-    @Inject
-    private RepositoryCRUD<E> repository;
+public interface ResourceCRUD<E extends EntityCRUD> {
+    public abstract RepositoryCRUD<E> getRepository();
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void create(E content) {
-        repository.add(content);
+    public default void create(E content) {
+        getRepository().add(content);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<E> readAll() {
-        return repository.getAll();
+    public default List<E> readAll() {
+        return getRepository().getAll();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response read(@PathParam("id") String id) {
+    public default Response read(@PathParam("id") String id) {
         return doWithID(id, (idLong) -> {
-            return Response.ok(repository.get(idLong)).build();
+            return Response.ok(getRepository().get(idLong)).build();
         });
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void update(E content) {
-        repository.update(content);
+    public default void update(E content) {
+        getRepository().update(content);
     }
 
     @DELETE
     @Path("{id}")
-    public void delete(@PathParam("id") String id) {
+    public default void delete(@PathParam("id") String id) {
         doWithID(id, (idLong) -> {
-            repository.remove(idLong);
+            getRepository().remove(idLong);
         });
     }
 
-    private Response doWithID(String id, Function<Long, Response> function) {
+    // TODO: change to private in Java 9
+    public default Response doWithID(String id, Function<Long, Response> function) {
         long idLong;
         try {
             idLong = Long.parseLong(id);
@@ -70,7 +69,8 @@ public abstract class ResourceCRUD<E extends EntityCRUD> {
         return function.apply(idLong);
     }
 
-    private void doWithID(String id, Consumer<Long> consumer) {
+    // TODO: change to private in Java 9
+    public default void doWithID(String id, Consumer<Long> consumer) {
         doWithID(id, (idLong) -> {
             consumer.accept(idLong);
             return null;

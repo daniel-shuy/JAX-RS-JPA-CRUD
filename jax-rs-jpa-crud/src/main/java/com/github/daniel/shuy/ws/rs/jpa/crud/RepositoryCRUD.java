@@ -1,10 +1,6 @@
 package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.New;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
@@ -18,43 +14,33 @@ import javax.persistence.criteria.Root;
  *
  * @param <E> The Entity Class type
  */
-public abstract class RepositoryCRUD<E extends EntityCRUD> {
-    @Inject
-    private EntityManager entityManager;
+public interface RepositoryCRUD<E extends EntityCRUD> {
+    public abstract EntityManager getEntityManager();
 
-    @Inject
-    @New
-    private Instance<E> entity;
+    public abstract Class<E> getEntityClass();
 
-    private Class<? extends EntityCRUD> clazz;
-
-    @PostConstruct
-    void postConstruct() {
-        clazz = entity.get().getClass();
-    }
-
-    public void add(E e) {
-        EntityTransaction transaction = entityManager.getTransaction();
+    public default void add(E e) {
+        EntityTransaction transaction = getEntityManager().getTransaction();
 
         transaction.begin();
-        entityManager.persist(e);
+        getEntityManager().persist(e);
         transaction.commit();
     }
 
-    public List<E> getAll() {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(clazz);
-        criteriaQuery.select(criteriaQuery.from(clazz));
-        TypedQuery<E> query = entityManager.createQuery(criteriaQuery);
+    public default List<E> getAll() {
+        CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
+        criteriaQuery.select(criteriaQuery.from(getEntityClass()));
+        TypedQuery<E> query = getEntityManager().createQuery(criteriaQuery);
 
         return query.getResultList();
     }
 
-    public E get(Long id) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(clazz);
-        Root<E> root = criteriaQuery.from(clazz);
-        TypedQuery<E> query = entityManager.createQuery(criteriaQuery.where(criteriaBuilder.equal(root.get(EntityCRUD_.id), id)));
+    public default E get(Long id) {
+        CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
+        Root<E> root = criteriaQuery.from(getEntityClass());
+        TypedQuery<E> query = getEntityManager().createQuery(criteriaQuery.where(criteriaBuilder.equal(root.get(EntityCRUD_.id), id)));
 
         E result;
         try {
@@ -65,22 +51,22 @@ public abstract class RepositoryCRUD<E extends EntityCRUD> {
         return result;
     }
 
-    public void update(E e) {
-        EntityTransaction transaction = entityManager.getTransaction();
+    public default void update(E e) {
+        EntityTransaction transaction = getEntityManager().getTransaction();
 
         transaction.begin();
-        entityManager.merge(e);
+        getEntityManager().merge(e);
         transaction.commit();
     }
 
-    public void remove(Long id) {
+    public default void remove(Long id) {
         final E e = get(id);
 
         if (e != null) {
-            EntityTransaction transaction = entityManager.getTransaction();
+            EntityTransaction transaction = getEntityManager().getTransaction();
 
             transaction.begin();
-            entityManager.remove(e);
+            getEntityManager().remove(e);
             transaction.commit();
         }
     }
