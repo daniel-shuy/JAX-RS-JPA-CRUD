@@ -51,8 +51,8 @@ public class EntityManagerProducer {
 __All CRUD database tables must have a sequential number Surrogate Primary Key.__
 
 For each CRUD database table:
-- Create a JPA Entity Class that extends `com.github.daniel.shuy.ws.rs.jpa.crud.EntityCRUD`
-- Create a Repository Class that extends `com.github.daniel.shuy.ws.rs.jpa.crud.RepositoryCRUD`
+- Create a JPA Entity Class that extends `com.github.daniel.shuy.ws.rs.jpa.crud.EntityCRUD` (without a [@Column](https://docs.oracle.com/javaee/7/api/javax/persistence/Column.html) mapping for the Primary Key).
+- Create an [@ApplicationScoped](docs.oracle.com/javaee/7/api/javax/enterprise/context/ApplicationScoped.html) Repository Class that extends `com.github.daniel.shuy.ws.rs.jpa.crud.RepositoryCRUD`
 - Create a JAX-RS Resource Class that extends `com.github.daniel.shuy.ws.rs.jpa.crud.ResourceCRUD`.
 
 ### Example:
