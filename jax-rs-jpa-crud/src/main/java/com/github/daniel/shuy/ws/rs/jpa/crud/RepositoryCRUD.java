@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  * Extend this class to create a CRUD Repository Class.
@@ -37,6 +38,31 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
         EntityManager entityManager = getEntityManager();
 
         return entityManager.find(getEntityClass(), id);
+    }
+
+    public default List<E> findRange(Long from, Long to) {
+        EntityManager entityManager = getEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
+        criteriaQuery.select(criteriaQuery.from(getEntityClass()));
+        TypedQuery<E> query = entityManager.createQuery(criteriaQuery);
+        query.setMaxResults(Math.toIntExact(to - from + 1));
+        query.setFirstResult(Math.toIntExact(from));
+
+        return query.getResultList();
+    }
+
+    public default long count() {
+        EntityManager entityManager = getEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
+        Root<E> root = criteriaQuery.from(getEntityClass());
+        criteriaQuery.select(criteriaBuilder.count(root));
+        TypedQuery<Long> query = entityManager.createQuery(criteriaQuery);
+
+        return query.getSingleResult();
     }
 
     public default void edit(E e) {

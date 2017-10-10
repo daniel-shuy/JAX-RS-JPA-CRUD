@@ -54,6 +54,30 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
         }
     }
 
+    @GET
+    @Path("{from}/{to}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public default List<E> findRange(@PathParam("from") Long from, @PathParam("to") Long to) {
+        try {
+            return getRepository().findRange(from, to);
+        }
+        finally {
+            close();
+        }
+    }
+
+    @GET
+    @Path("count")
+    @Produces(MediaType.TEXT_PLAIN)
+    public default String count() {
+        try {
+            return String.valueOf(getRepository().count());
+        }
+        finally {
+            close();
+        }
+    }
+    
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public default void edit(E content) {
