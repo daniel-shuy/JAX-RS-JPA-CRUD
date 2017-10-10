@@ -2,8 +2,6 @@ package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import java.io.Closeable;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * Extend this class to create a CRUD JAX-RS Repository Class.
@@ -48,11 +45,9 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public default Response find(@PathParam("id") String id) {
+    public default E find(@PathParam("id") Long id) {
         try {
-            return doWithID(id, (idLong) -> {
-                return Response.ok(getRepository().find(idLong)).build();
-            });
+            return getRepository().find(id);
         }
         finally {
             close();
@@ -72,11 +67,9 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
 
     @DELETE
     @Path("{id}")
-    public default void remove(@PathParam("id") String id) {
+    public default void remove(@PathParam("id") Long id) {
         try {
-            doWithID(id, (idLong) -> {
-                getRepository().remove(idLong);
-            });
+            getRepository().remove(id);
         }
         finally {
             close();
@@ -85,24 +78,4 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
 
     @Override
     public default void close() {}
-
-    // TODO: change to private in Java 9
-    public default Response doWithID(String id, Function<Long, Response> function) {
-        long idLong;
-        try {
-            idLong = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("id must be a Number").build();
-        }
-
-        return function.apply(idLong);
-    }
-
-    // TODO: change to private in Java 9
-    public default void doWithID(String id, Consumer<Long> consumer) {
-        doWithID(id, (idLong) -> {
-            consumer.accept(idLong);
-            return null;
-        });
-    }
 }
