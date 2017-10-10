@@ -19,24 +19,29 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
     public abstract Class<E> getEntityClass();
 
     public default void create(E e) {
+        EntityManager entityManager = getEntityManager();
 
-        getEntityManager().persist(e);
+        entityManager.persist(e);
     }
 
     public default List<E> findAll() {
-        CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
+        EntityManager entityManager = getEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
         criteriaQuery.select(criteriaQuery.from(getEntityClass()));
-        TypedQuery<E> query = getEntityManager().createQuery(criteriaQuery);
+        TypedQuery<E> query = entityManager.createQuery(criteriaQuery);
 
         return query.getResultList();
     }
 
     public default E find(Long id) {
-        CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
+        EntityManager entityManager = getEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
         Root<E> root = criteriaQuery.from(getEntityClass());
-        TypedQuery<E> query = getEntityManager().createQuery(criteriaQuery.where(criteriaBuilder.equal(root.get(EntityCRUD_.id), id)));
+        TypedQuery<E> query = entityManager.createQuery(criteriaQuery.where(criteriaBuilder.equal(root.get(EntityCRUD_.id), id)));
 
         E result;
         try {
@@ -48,15 +53,18 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
     }
 
     public default void edit(E e) {
+        EntityManager entityManager = getEntityManager();
 
-        getEntityManager().merge(e);
+        entityManager.merge(e);
     }
 
     public default void remove(Long id) {
+        EntityManager entityManager = getEntityManager();
+
         final E e = find(id);
 
         if (e != null) {
-            getEntityManager().remove(e);
+            entityManager.remove(e);
         }
     }
 }
