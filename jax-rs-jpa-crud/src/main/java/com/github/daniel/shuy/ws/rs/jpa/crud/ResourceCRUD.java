@@ -24,7 +24,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     public abstract RepositoryCRUD<E> getRepository();
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public default void create(E content) {
         try {
             getRepository().add(content);
@@ -35,8 +35,8 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public default List<E> readAll() {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
         try {
             return getRepository().getAll();
         }
@@ -47,8 +47,8 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public default Response read(@PathParam("id") String id) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
         try {
             return doWithID(id, (idLong) -> {
                 return Response.ok(getRepository().get(idLong)).build();
@@ -60,8 +60,8 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
     public default void update(E content) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
         try {
             getRepository().update(content);
         }
