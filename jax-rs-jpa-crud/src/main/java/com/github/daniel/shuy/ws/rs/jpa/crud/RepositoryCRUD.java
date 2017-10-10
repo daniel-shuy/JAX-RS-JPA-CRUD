@@ -18,12 +18,12 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
 
     public abstract Class<E> getEntityClass();
 
-    public default void add(E e) {
+    public default void create(E e) {
 
         getEntityManager().persist(e);
     }
 
-    public default List<E> getAll() {
+    public default List<E> findAll() {
         CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
         criteriaQuery.select(criteriaQuery.from(getEntityClass()));
@@ -32,7 +32,7 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
         return query.getResultList();
     }
 
-    public default E get(Long id) {
+    public default E find(Long id) {
         CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
         Root<E> root = criteriaQuery.from(getEntityClass());
@@ -47,13 +47,13 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
         return result;
     }
 
-    public default void update(E e) {
+    public default void edit(E e) {
 
         getEntityManager().merge(e);
     }
 
     public default void remove(Long id) {
-        final E e = get(id);
+        final E e = find(id);
 
         if (e != null) {
             getEntityManager().remove(e);

@@ -27,7 +27,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public default void create(E content) {
         try {
-            getRepository().add(content);
+            getRepository().create(content);
         }
         finally {
             close();
@@ -36,9 +36,9 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public default List<E> readAll() {
+    public default List<E> findAll() {
         try {
-            return getRepository().getAll();
+            return getRepository().findAll();
         }
         finally {
             close();
@@ -48,10 +48,10 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public default Response read(@PathParam("id") String id) {
+    public default Response find(@PathParam("id") String id) {
         try {
             return doWithID(id, (idLong) -> {
-                return Response.ok(getRepository().get(idLong)).build();
+                return Response.ok(getRepository().find(idLong)).build();
             });
         }
         finally {
@@ -61,9 +61,9 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
 
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public default void update(E content) {
+    public default void edit(E content) {
         try {
-            getRepository().update(content);
+            getRepository().edit(content);
         }
         finally {
             close();
@@ -72,7 +72,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
 
     @DELETE
     @Path("{id}")
-    public default void delete(@PathParam("id") String id) {
+    public default void remove(@PathParam("id") String id) {
         try {
             doWithID(id, (idLong) -> {
                 getRepository().remove(idLong);
