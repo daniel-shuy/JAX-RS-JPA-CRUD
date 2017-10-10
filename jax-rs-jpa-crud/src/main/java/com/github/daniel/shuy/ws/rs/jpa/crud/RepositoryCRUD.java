@@ -2,11 +2,9 @@ package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  * Extend this class to create a CRUD Repository Class.
@@ -37,19 +35,8 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
 
     public default E find(Long id) {
         EntityManager entityManager = getEntityManager();
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
-        Root<E> root = criteriaQuery.from(getEntityClass());
-        TypedQuery<E> query = entityManager.createQuery(criteriaQuery.where(criteriaBuilder.equal(root.get(EntityCRUD_.id), id)));
-
-        E result;
-        try {
-            result = query.getSingleResult();
-        } catch (NoResultException e) {
-            result = null;
-        }
-        return result;
+        return entityManager.find(getEntityClass(), id);
     }
 
     public default void edit(E e) {
