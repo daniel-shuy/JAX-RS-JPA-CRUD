@@ -25,8 +25,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     public default void create(E content) {
         try {
             getRepository().create(content);
-        }
-        finally {
+        } finally {
             close();
         }
     }
@@ -36,8 +35,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     public default List<E> findAll() {
         try {
             return getRepository().findAll();
-        }
-        finally {
+        } finally {
             close();
         }
     }
@@ -48,8 +46,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     public default E find(@PathParam("id") Long id) {
         try {
             return getRepository().find(id);
-        }
-        finally {
+        } finally {
             close();
         }
     }
@@ -60,8 +57,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     public default List<E> findRange(@PathParam("from") Long from, @PathParam("to") Long to) {
         try {
             return getRepository().findRange(from, to);
-        }
-        finally {
+        } finally {
             close();
         }
     }
@@ -72,8 +68,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     public default String count() {
         try {
             return String.valueOf(getRepository().count());
-        }
-        finally {
+        } finally {
             close();
         }
     }
@@ -83,8 +78,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     public default void edit(E content) {
         try {
             getRepository().edit(content);
-        }
-        finally {
+        } finally {
             close();
         }
     }
@@ -94,8 +88,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     public default void remove(@PathParam("id") Long id) {
         try {
             getRepository().remove(id);
-        }
-        finally {
+        } finally {
             close();
         }
     }
