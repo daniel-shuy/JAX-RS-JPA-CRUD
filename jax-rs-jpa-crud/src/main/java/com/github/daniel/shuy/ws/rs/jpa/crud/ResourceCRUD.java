@@ -18,6 +18,11 @@ import javax.ws.rs.core.MediaType;
  * @param <E> The Entity Class type
  */
 public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
+    /**
+     * Override this method to provide a Repository instance.
+     * 
+     * @return A Repository instance.
+     */
     public abstract RepositoryCRUD<E> getRepository();
 
     @POST
@@ -93,6 +98,9 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
         }
     }
 
+    /**
+     * Override this method to implement actions to perform after each transaction.
+     */
     @Override
     public default void close() {}
 }

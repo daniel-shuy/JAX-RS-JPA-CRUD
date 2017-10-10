@@ -13,8 +13,18 @@ import javax.persistence.criteria.Root;
  * @param <E> The Entity Class type
  */
 public interface RepositoryCRUD<E extends EntityCRUD> {
+    /**
+     * Override this method to provide a {@link EntityManager} instance.
+     * 
+     * @return A {@link EntityManager} instance.
+     */
     public abstract EntityManager getEntityManager();
 
+    /**
+     * Override this method to provide the {@link Class} of the JPA Entity.
+     * 
+     * @return The {@link Class} of the JPA Entity.
+     */
     public abstract Class<E> getEntityClass();
 
     public default void create(E e) {
