@@ -2,7 +2,6 @@ package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,11 +19,8 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
     public abstract Class<E> getEntityClass();
 
     public default void add(E e) {
-        EntityTransaction transaction = getEntityManager().getTransaction();
 
-        transaction.begin();
         getEntityManager().persist(e);
-        transaction.commit();
     }
 
     public default List<E> getAll() {
@@ -52,22 +48,15 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
     }
 
     public default void update(E e) {
-        EntityTransaction transaction = getEntityManager().getTransaction();
 
-        transaction.begin();
         getEntityManager().merge(e);
-        transaction.commit();
     }
 
     public default void remove(Long id) {
         final E e = get(id);
 
         if (e != null) {
-            EntityTransaction transaction = getEntityManager().getTransaction();
-
-            transaction.begin();
             getEntityManager().remove(e);
-            transaction.commit();
         }
     }
 }
