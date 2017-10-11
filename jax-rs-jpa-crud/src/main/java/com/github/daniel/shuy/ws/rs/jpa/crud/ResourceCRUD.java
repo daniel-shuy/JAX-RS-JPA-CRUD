@@ -2,6 +2,7 @@ package com.github.daniel.shuy.ws.rs.jpa.crud;
 
 import java.io.Closeable;
 import java.util.List;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -27,6 +28,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
 
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Transactional(rollbackOn = Exception.class)
     public default void create(E content) {
         try {
             getRepository().create(content);
@@ -80,6 +82,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Transactional(rollbackOn = Exception.class)
     public default void edit(E content) {
         try {
             getRepository().edit(content);
@@ -90,6 +93,7 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
 
     @DELETE
     @Path("{id}")
+    @Transactional(rollbackOn = Exception.class)
     public default void remove(@PathParam("id") Long id) {
         try {
             getRepository().remove(id);
