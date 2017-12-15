@@ -1,6 +1,5 @@
 package com.github.daniel.shuy.ws.rs.jpa.crud;
 
-import java.io.Closeable;
 import java.util.List;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -18,7 +17,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @param <E> The Entity Class type
  */
-public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
+public interface ResourceCRUD<E extends EntityCRUD> {
     /**
      * Override this method to provide a Repository instance.
      * 
@@ -30,81 +29,47 @@ public interface ResourceCRUD<E extends EntityCRUD> extends Closeable {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Transactional(rollbackOn = Exception.class)
     public default void create(E content) {
-        try {
-            getRepository().create(content);
-        } finally {
-            close();
-        }
+        getRepository().create(content);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public default List<E> findAll() {
-        try {
-            return getRepository().findAll();
-        } finally {
-            close();
-        }
+        return getRepository().findAll();
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public default E find(@PathParam("id") Long id) {
-        try {
-            return getRepository().find(id);
-        } finally {
-            close();
-        }
+        return getRepository().find(id);
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public default List<E> findRange(@PathParam("from") Long from, @PathParam("to") Long to) {
-        try {
-            return getRepository().findRange(from, to);
-        } finally {
-            close();
-        }
+        return getRepository().findRange(from, to);
     }
 
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public default String count() {
-        try {
-            return String.valueOf(getRepository().count());
-        } finally {
-            close();
-        }
+        return String.valueOf(getRepository().count());
     }
     
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Transactional(rollbackOn = Exception.class)
     public default void edit(E content) {
-        try {
-            getRepository().edit(content);
-        } finally {
-            close();
-        }
+        getRepository().edit(content);
     }
 
     @DELETE
     @Path("{id}")
     @Transactional(rollbackOn = Exception.class)
     public default void remove(@PathParam("id") Long id) {
-        try {
-            getRepository().remove(id);
-        } finally {
-            close();
-        }
+        getRepository().remove(id);
     }
-
-    /**
-     * Override this method to implement actions to perform after each transaction.
-     */
-    @Override
-    public default void close() {}
 }
