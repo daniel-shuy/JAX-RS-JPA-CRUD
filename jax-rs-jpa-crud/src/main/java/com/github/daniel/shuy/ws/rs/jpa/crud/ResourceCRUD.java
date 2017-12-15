@@ -17,7 +17,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @param <E> The Entity Class type
  */
-public interface ResourceCRUD<E extends EntityCRUD> {
+public abstract class ResourceCRUD<E extends EntityCRUD> {
     /**
      * Override this method to provide a Repository instance.
      * 
@@ -28,48 +28,48 @@ public interface ResourceCRUD<E extends EntityCRUD> {
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Transactional(rollbackOn = Exception.class)
-    public default void create(E content) {
+    public void create(E content) {
         getRepository().create(content);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public default List<E> findAll() {
+    public List<E> findAll() {
         return getRepository().findAll();
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public default E find(@PathParam("id") Long id) {
+    public E find(@PathParam("id") Long id) {
         return getRepository().find(id);
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public default List<E> findRange(@PathParam("from") Long from, @PathParam("to") Long to) {
+    public List<E> findRange(@PathParam("from") Long from, @PathParam("to") Long to) {
         return getRepository().findRange(from, to);
     }
 
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
-    public default String count() {
+    public String count() {
         return String.valueOf(getRepository().count());
     }
     
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Transactional(rollbackOn = Exception.class)
-    public default void edit(E content) {
+    public void edit(E content) {
         getRepository().edit(content);
     }
 
     @DELETE
     @Path("{id}")
     @Transactional(rollbackOn = Exception.class)
-    public default void remove(@PathParam("id") Long id) {
+    public void remove(@PathParam("id") Long id) {
         getRepository().remove(id);
     }
 }
