@@ -27,7 +27,7 @@ public abstract class ResourceCRUD<E extends EntityCRUD> {
 
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional
     public void create(E content) {
         getRepository().create(content);
     }
@@ -61,14 +61,14 @@ public abstract class ResourceCRUD<E extends EntityCRUD> {
     
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional
     public void edit(E content) {
         getRepository().edit(content);
     }
 
     @DELETE
     @Path("{id}")
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional
     public void remove(@PathParam("id") Long id) {
         getRepository().remove(id);
     }
