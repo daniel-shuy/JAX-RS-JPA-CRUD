@@ -27,7 +27,7 @@ Add the following to your Maven dependency list:
 <dependency>
     <groupId>com.github.daniel-shuy</groupId>
     <artifactId>jax-rs-jpa-crud</artifactId>
-    <version>3.1.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -82,7 +82,27 @@ public class User extends EntityCRUD {
 
 #### Repository Class
 - Override `getEntityClass` to provide the JPA Entity Class.
-- Override `getEntityManager` to provide the JPA [EntityManager](https://static.javadoc.io/org.eclipse.persistence/javax.persistence/2.2.0/javax/persistence/EntityManager.html) instance to use. How to provide the EntityManager instance depends whether you want to use Enterprise JavaBean (EJB) or Contexts and Dependency Injection (CDI).
+- Override `getEntityManager` to provide the JPA [EntityManager](https://static.javadoc.io/org.eclipse.persistence/javax.persistence/2.2.0/javax/persistence/EntityManager.html) instance to use. How to provide the EntityManager instance depends on your environment.
+
+##### CDI Example (Recommended)
+- Requires Contexts and Dependency Injection (CDI)
+```java
+@RequestScoped
+public class UserRepository implements RepositoryCRUD<User> {
+    @PersistenceContext(name = "persistence-unit")  // name is Persistence Unit Name configured in persistence.xml
+    private EntityManager entityManager;
+
+    @Override
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    @Override
+    public Class<User> getEntityClass() {
+        return User.class;
+    }
+}
+```
 
 ##### EJB Example
 - Requires Repository Class to be an Enterprise JavaBean (EJB)
@@ -105,37 +125,18 @@ public class UserRepository implements RepositoryCRUD<User> {
 }
 ```
 
-##### CDI Example
-- Requires Contexts and Dependency Injection (CDI)
+##### Barebones (no CDI/EJB) Example
+- A new `EntityManager` instance needs to be created for each `RepositoryCRUD` instance, because `EntityManager` is not thread-safe.
 ```java
-@Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER})
-public @interface MySQLDatabase {}
-```
-- Qualifier annotation is optional if your application only has 1 persistence unit
-```java
-@ApplicationScoped
-public class EntityManagerProducer {
-    private final EntityManagerFactory factory = Persistence.createEntityManagerFactory("persistence-unit");    // input argument is Persistence Unit Name configured in persistence.xml
-
-    @Produces
-    @RequestScoped
-    @MySQLDatabase
-    EntityManager createEntityManager() {
-        return factory.createEntityManager();
-    }
-
-    void closeEntityManager(@Disposes @MySQLDatabase EntityManager entityManager) {
-        entityManager.close();
-    }
-}
-
-@ApplicationScoped
 public class UserRepository implements RepositoryCRUD<User> {
-    @Inject
-    @MySQLDatabase
-    private EntityManager entityManager;
+    // argument is Persistence Unit Name configured in persistence.xml
+    private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory("persistence-unit");
+
+    private final EntityManager entityManager;
+
+    public UserRepository() {
+        entityManager = factory.createEntityManager();
+    }
 
     @Override
     public EntityManager getEntityManager() {
@@ -151,10 +152,24 @@ public class UserRepository implements RepositoryCRUD<User> {
 
 #### Resource Class
 
-##### EJB Example
+##### CDI Example:
 ```java
 @Path("/user")
-public class UserResource implements ResourceCRUD<User> {
+public class UserResource extends ResourceCRUD<User> {
+    @Inject
+    private UserRepository repository;
+
+    @Override
+    public RepositoryCRUD<User> getRepository() {
+        return repository;
+    }
+}
+```
+
+##### EJB Example:
+```java
+@Path("/user")
+public class UserResource extends ResourceCRUD<User> {
     @EJB
     private UserRepository repository;
 
@@ -165,17 +180,14 @@ public class UserResource implements ResourceCRUD<User> {
 }
 ```
 
-##### CDI Example:
-- Requires CDI
+##### Barebones (no CDI/EJB) Example:
+- A new `RepositoryCRUD` instance needs to be explicitly created on each call to `getRepository()`, since we don't have CDI's [@RequestScoped](https://docs.jboss.org/cdi/api/1.0/javax/enterprise/context/RequestScoped.html) or EJB's [@Stateless](https://docs.oracle.com/javaee/7/api/javax/ejb/Stateless.html).
 ```java
 @Path("/user")
-public class UserResource implements ResourceCRUD<User> {
-    @Inject
-    private UserRepository repository;
-
+public class UserResource extends ResourceCRUD<User> {
     @Override
     public RepositoryCRUD<User> getRepository() {
-        return repository;
+        return new UserRepository();
     }
 }
 ```
