@@ -1,5 +1,5 @@
 # JAX-RS-JPA-CRUD
-**This project is no longer being maintained. JAX-RS is simply not created to be extendable/composable (eg. it is impossible to overload a JAX-RS method with different `@QueryParam`s).**
+**This project is no longer being maintained (however, the released artifacts will still remain in Maven Central). JAX-RS is simply not created to be extendable/composable (eg. it is impossible to overload a JAX-RS method with different `@QueryParam`s).**
 
 Provides extendable classes/interfaces to create JAX-RS CRUD Web Services from JPA entity classes.
 
