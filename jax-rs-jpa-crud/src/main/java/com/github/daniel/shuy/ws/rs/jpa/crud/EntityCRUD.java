@@ -39,22 +39,35 @@ public abstract class EntityCRUD implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+        /*
+        JPA entities should return constant hash code to allow lookups of a persisted managed entity
+        that was added to a HashSet/HashMap while transient.
+        See https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+         */
+        return 0;
     }
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof EntityCRUD) || !this.getClass().isInstance(object)) {
+        if (this == object) {
+            return true;
+        }
+
+        if (!getClass().isInstance(object)) {
             return false;
         }
-        EntityCRUD other = (EntityCRUD) object;
-        if (this.id == null) {
-            return (other.id == null);
-        } else {
-            return this.id.equals(other.id);
+
+        /*
+        Transient JPA entities should only be equal if they have referential equality.
+        See https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+         */
+        Long id = getId();
+        if (id == null) {
+            return false;
         }
+
+        EntityCRUD other = (EntityCRUD) object;
+        return id.equals(other.id);
     }
 
     @Override
