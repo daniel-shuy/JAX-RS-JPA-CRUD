@@ -30,6 +30,8 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
     public default E create(E e) {
         EntityManager entityManager = getEntityManager();
 
+        e.setId(null);
+
         // use EntityManager#merge(T) instead of EntityManager#persist(T)
         // so that entity will be refreshed
         return entityManager.merge(e);
