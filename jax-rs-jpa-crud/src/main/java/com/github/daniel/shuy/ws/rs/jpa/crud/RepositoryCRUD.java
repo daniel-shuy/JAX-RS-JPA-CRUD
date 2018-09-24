@@ -27,10 +27,12 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
      */
     public abstract Class<E> getEntityClass();
 
-    public default void create(E e) {
+    public default E create(E e) {
         EntityManager entityManager = getEntityManager();
 
-        entityManager.persist(e);
+        // use EntityManager#merge(T) instead of EntityManager#persist(T)
+        // so that entity will be refreshed
+        return entityManager.merge(e);
     }
 
     public default List<E> findAll() {
@@ -75,10 +77,10 @@ public interface RepositoryCRUD<E extends EntityCRUD> {
         return query.getSingleResult();
     }
 
-    public default void edit(E e) {
+    public default E edit(E e) {
         EntityManager entityManager = getEntityManager();
 
-        entityManager.merge(e);
+        return entityManager.merge(e);
     }
 
     public default void remove(Long id) {

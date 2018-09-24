@@ -28,8 +28,8 @@ public abstract class ResourceCRUD<E extends EntityCRUD> {
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Transactional
-    public void create(E content) {
-        getRepository().create(content);
+    public E create(E content) {
+        return getRepository().create(content);
     }
 
     @GET
@@ -62,8 +62,8 @@ public abstract class ResourceCRUD<E extends EntityCRUD> {
     @PUT
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Transactional
-    public void edit(E content) {
-        getRepository().edit(content);
+    public E edit(E content) {
+        return getRepository().edit(content);
     }
 
     @DELETE
