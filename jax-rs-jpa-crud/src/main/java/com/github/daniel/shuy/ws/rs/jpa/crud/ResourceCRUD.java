@@ -63,6 +63,11 @@ public abstract class ResourceCRUD<E extends EntityCRUD> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Transactional
     public E edit(E content) {
+        if (content.getId() == null) {
+            // consider wrapping this with a ConstraintViolationException if
+            // Bean Validation is used.
+            throw new IllegalArgumentException("id must not be null");
+        }
         return getRepository().edit(content);
     }
 
